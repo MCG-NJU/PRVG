@@ -1,0 +1,6 @@
+pip install torchtext==0.14.0
+pip install easydict
+pip install terminaltables
+pip install pyyaml
+pip install h5py
+pip install numpy==1.26.3

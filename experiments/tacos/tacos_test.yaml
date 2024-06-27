@@ -1,0 +1,72 @@
+WORKERS: 8
+
+MODEL_DIR: ./checkpoints
+RESULT_DIR: ./results
+LOG_DIR: ./log
+DATA_DIR: /data0/shifengyuan/data/TACoS
+
+DATASET:
+  NAME: TACoS
+  VIS_INPUT_TYPE: c3d
+  NO_VAL: False
+  NUM_SAMPLE_CLIPS: 512
+  NORMALIZE: True
+  RANDOM_SAMPLING: False
+
+TEST:
+  BATCH_SIZE: 16
+  RECALL: 1
+  TIOU: 0.1,0.3,0.5,0.7
+  EVAL_TRAIN: False
+
+CUDNN:
+  DETERMINISTIC: False
+  BENCHMARK: True
+
+TRAIN:
+  BATCH_SIZE: 16
+  LR: 0.0001
+  WEIGHT_DECAY: 0.0000
+  MAX_EPOCH: 100
+  CONTINUE: False
+  FACTOR: 0.8
+  PATIENCE: 20
+
+LOSS:
+  NAME: final_loss
+  PARAMS:
+    MIN_IOU: 0.5
+    MAX_IOU: 1.0
+    BIAS: 0.0
+
+    LAMBDA: 2
+    BETA: 2
+
+PRVG:
+  PARALLEL_REGRESSION_MODULE:
+    NAME: ParallelRegression
+    PARAMS:
+      NUM_QUERIES: 8
+      NUM_CLASSES: 1
+      HIDDEN_DIM: 512
+      DROPOUT: 0.1
+      NHEADS: 8
+      DIM_FEEDFORWAD: 4096
+      CRE_LAYERS: 1
+      LMD_LAYERS: 1
+
+  LSTM:
+    NAME: lstm
+    PARAMS:
+      HIDDEN_SIZE: 512
+      MAX_SENTENCE_LEN: 30
+      TXT_INPUT_SIZE: 300
+      TXT_HIDDEN_SIZE: 512
+      NUM_LAYERS: 3
+      BIDIRECTIONAL: False
+
+  INPUT_SIZE: 4096
+
+MODEL:
+  NAME: PRVG
+  CHECKPOINT: ./best_checkpoints/TACoS/iter004655.pkl
